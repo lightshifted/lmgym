@@ -1,4 +1,4 @@
-deepspeed train.py \
+deepspeed ../train.py \
   --model_name_or_path EleutherAI/gpt-j-6b \
   --tokenizer_name EleutherAI/gpt-j-6b \
   --dataset_name AlekseyKorshuk/hh-lmgym-demo \
