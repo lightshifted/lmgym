@@ -1,0 +1,27 @@
+2023-05-27 02:34:08,410 INFO    StreamThr :98369 [internal.py:wandb_internal():88] W&B internal server running at pid: 98369, started at: 2023-05-27 02:34:08.409746
+2023-05-27 02:34:08,412 DEBUG   HandlerThread:98369 [handler.py:handle_request():139] handle_request: status
+2023-05-27 02:34:08,413 DEBUG   SenderThread:98369 [sender.py:send_request():317] send_request: status
+2023-05-27 02:34:08,414 INFO    WriterThread:98369 [datastore.py:open_for_write():75] open: /home/ubuntu/lmgym/clm_models/wandb/offline-run-20230527_023408-2u3uju1k/run-2u3uju1k.wandb
+2023-05-27 02:34:08,453 DEBUG   HandlerThread:98369 [handler.py:handle_request():139] handle_request: run_start
+2023-05-27 02:34:08,458 DEBUG   HandlerThread:98369 [system_info.py:__init__():31] System info init
+2023-05-27 02:34:08,458 DEBUG   HandlerThread:98369 [system_info.py:__init__():46] System info init done
+2023-05-27 02:34:08,458 INFO    HandlerThread:98369 [system_monitor.py:start():150] Starting system monitor
+2023-05-27 02:34:08,458 INFO    SystemMonitor:98369 [system_monitor.py:_start():116] Starting system asset monitoring threads
+2023-05-27 02:34:08,458 INFO    HandlerThread:98369 [system_monitor.py:probe():168] Collecting system info
+2023-05-27 02:34:08,459 INFO    SystemMonitor:98369 [interfaces.py:start():168] Started cpu
+2023-05-27 02:34:08,459 INFO    SystemMonitor:98369 [interfaces.py:start():168] Started disk
+2023-05-27 02:34:08,460 INFO    SystemMonitor:98369 [interfaces.py:start():168] Started gpu
+2023-05-27 02:34:08,460 INFO    SystemMonitor:98369 [interfaces.py:start():168] Started memory
+2023-05-27 02:34:08,461 INFO    SystemMonitor:98369 [interfaces.py:start():168] Started network
+2023-05-27 02:34:08,471 DEBUG   HandlerThread:98369 [system_info.py:probe():195] Probing system
+2023-05-27 02:34:08,477 DEBUG   HandlerThread:98369 [system_info.py:_probe_git():180] Probing git
+2023-05-27 02:34:08,490 DEBUG   HandlerThread:98369 [system_info.py:_probe_git():188] Probing git done
+2023-05-27 02:34:08,490 DEBUG   HandlerThread:98369 [system_info.py:probe():241] Probing system done
+2023-05-27 02:34:08,490 DEBUG   HandlerThread:98369 [system_monitor.py:probe():177] {'os': 'Linux-5.15.0-67-generic-x86_64-with-glibc2.29', 'python': '3.8.10', 'heartbeatAt': '2023-05-27T02:34:08.471428', 'startedAt': '2023-05-27T02:34:08.400544', 'docker': None, 'cuda': None, 'args': ('--local_rank=0', '--model_name_or_path', 'EleutherAI/gpt-j-6b', '--tokenizer_name', 'EleutherAI/gpt-j-6b', '--dataset_name', 'AlekseyKorshuk/hh-lmgym-demo', '--train_to_probs', 'False', '--do_train', '--do_eval', '--logging_strategy', 'steps', '--evaluation_strategy', 'epoch', '--eval_steps', '1', '--save_strategy', 'epoch', '--save_steps', '1', '--logging_steps', '100', '--logging_first_step', '--report_to', 'all', '--output_dir', './checkpoints/gptj_hh_lora', '--overwrite_output_dir', '--per_device_train_batch_size', '2', '--gradient_accumulation_steps', '16', '--gradient_checkpointing', 'False', '--max_eval_samples', '500', '--num_train_epochs', '2', '--eval_first_step', 'False', '--learning_rate', '1e-5', '--lr_scheduler_type', 'cosine', '--fp16', '--seed', '99', '--validation_split_percentage', '1', '--remove_unused_columns', 'False', '--deepspeed', './deepspeed_configs/ds_config_stage_3.json', '--clean_enabled', 'False', '--block_size', '512', '--use_lora', 'True', '--warmup_ratio', '0.03', '--weight_decay', '0.00001', '--push_to_hub', 'True', '--hub_model_id', 'AlekseyKorshuk/hh-lmgym-demo-lora', '--hub_strategy', 'end'), 'state': 'running', 'program': '../train.py', 'codePath': 'train.py', 'git': {'remote': 'https://github.com/lightshifted/lmgym', 'commit': '550057e25c91ad110c2a2645202b2f77080f29e6'}, 'email': 'leptonneutrino@protonmail.com', 'root': '/home/ubuntu/lmgym', 'host': '140-238-228-153', 'username': 'ubuntu', 'executable': '/usr/bin/python3', 'cpu_count': 30, 'cpu_count_logical': 30, 'disk': {'total': 496.0301856994629, 'used': 71.02447891235352}, 'gpu': 'NVIDIA A100-SXM4-40GB', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA A100-SXM4-40GB', 'memory_total': 42949672960}], 'memory': {'total': 196.58135223388672}}
+2023-05-27 02:34:08,491 INFO    HandlerThread:98369 [system_monitor.py:probe():178] Finished collecting system info
+2023-05-27 02:34:08,491 INFO    HandlerThread:98369 [system_monitor.py:probe():181] Publishing system info
+2023-05-27 02:34:08,491 DEBUG   HandlerThread:98369 [system_info.py:_save_pip():51] Saving list of pip packages installed into the current environment
+2023-05-27 02:34:08,491 DEBUG   HandlerThread:98369 [system_info.py:_save_pip():67] Saving pip packages done
+2023-05-27 02:34:08,492 INFO    HandlerThread:98369 [system_monitor.py:probe():183] Finished publishing system info
+2023-05-27 02:34:17,475 DEBUG   HandlerThread:98369 [handler.py:handle_request():139] handle_request: partial_history
+2023-05-27 02:35:08,462 DEBUG   SystemMonitor:98369 [system_monitor.py:_start():130] Starting system metrics aggregation loop

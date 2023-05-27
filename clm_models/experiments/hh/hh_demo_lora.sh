@@ -27,7 +27,7 @@ deepspeed ../train.py \
   --seed 99 \
   --validation_split_percentage 1 \
   --remove_unused_columns False \
-  --deepspeed ./deepspeed_configs/ds_config_stage_2_offload.json \
+  --deepspeed ./deepspeed_configs/ds_config_stage_3.json \
   --clean_enabled False \
   --block_size 512 \
   --use_lora True \
@@ -35,4 +35,4 @@ deepspeed ../train.py \
   --weight_decay 0.00001 \
   --push_to_hub True \
   --hub_model_id "AlekseyKorshuk/hh-lmgym-demo-lora" \
-  --hub_strategy end
+  --hub_strategy end \
