@@ -16,7 +16,9 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    model_args, data_args, train_args = utils.get_parsed_arguments()
+
+    model_args, data_args, train_args, lora_args = utils.get_parsed_arguments()
+
     utils.setup_logging(train_args.get_process_log_level())
     utils.log_training_environment_info(train_args)
 
@@ -29,13 +31,17 @@ def main():
     model_config = utils.get_model_config(model_args)
     model = utils.get_base_model_for_finetuning(model_args, model_config)
     model.resize_token_embeddings(len(tokenizer))
+    
+    if lora_args.use_lora:
+        model = utils.prepare_lora_model(model, lora_args)
 
     tokenized_datasets = utils.get_tokenized_dataset(
-            train_args,
-            data_args,
-            raw_datasets,
-            tokenizer
-            )
+        train_args,
+        data_args,
+        raw_datasets,
+        tokenizer
+    )
+
     with train_args.main_process_first(desc="grouping texts together"):
         lm_datasets = tokenized_datasets
         print("Example data:", lm_datasets["train"][0])
@@ -93,11 +99,14 @@ def main():
         trainer.save_metrics("eval", metrics)
         trainer.log(metrics)
 
-    cards_config = utils.get_huggingface_cards_config(model_args, data_args)
-    if train_args.push_to_hub:
-        trainer.push_to_hub(**cards_config)
+    if lora_args.use_lora:
+        utils.save_lora_adapter(trainer.model, train_args)
     else:
-        trainer.create_model_card(**cards_config)
+        cards_config = utils.get_huggingface_cards_config(model_args, data_args)
+        if train_args.push_to_hub:
+            trainer.push_to_hub(**cards_config)
+        else:
+            trainer.create_model_card(**cards_config)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 from functools import partial
+from dotenv import load_dotenv
 import logging
 import math
 import os
@@ -18,19 +19,29 @@ from transformers import (
     HfArgumentParser,
     TrainingArguments,
 )
+from peft import (
+    get_peft_model,
+    LoraConfig,
+    TaskType
+)
 
 from clm_models.custom import tokenization
 from clm_models.custom.model_arguments import (
     ModelArguments,
-    DataTrainingArguments
+    DataTrainingArguments,
+    LoraArguments
 )
 
 logger = logging.getLogger(__name__)
 accuracy_metric = evaluate.load("accuracy")
 
+dotenv_path = "../../.env"
+load_dotenv(dotenv_path)
+
+api_token = os.getenv("HUGGINGFACE_TOKEN")
 
 def get_parsed_arguments():
-    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments))
+    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments, LoraArguments))
     if _console_args_points_to_json():
         args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
     else:
@@ -81,7 +92,7 @@ def get_raw_dataset(data_args, model_args):
         data_args.dataset_name,
         data_args.dataset_config_name,
         cache_dir=model_args.cache_dir,
-        use_auth_token=True,
+        use_auth_token=api_token,
     )
     if "validation" not in raw_datasets.keys():
         raw_datasets["validation"] = load_dataset(
@@ -89,14 +100,14 @@ def get_raw_dataset(data_args, model_args):
             data_args.dataset_config_name,
             split=f"train[:{data_args.validation_split_percentage}%]",
             cache_dir=model_args.cache_dir,
-            use_auth_token=True,
+            use_auth_token=api_token,
         )
         raw_datasets["train"] = load_dataset(
             data_args.dataset_name,
             data_args.dataset_config_name,
             split=f"train[{data_args.validation_split_percentage}%:]",
             cache_dir=model_args.cache_dir,
-            use_auth_token=True,
+            use_auth_token=api_token,
         )
     return raw_datasets
 
@@ -105,7 +116,7 @@ def get_model_config(model_args):
     config_kwargs = {
         "cache_dir": model_args.cache_dir,
         "revision": model_args.model_revision,
-        "use_auth_token": True,
+        "use_auth_token": api_token,
     }
     if model_args.config_name:
         config = AutoConfig.from_pretrained(model_args.config_name, **config_kwargs)
@@ -126,7 +137,7 @@ def get_tokenizer(model_args):
         "cache_dir": model_args.cache_dir,
         "use_fast": model_args.use_fast_tokenizer,
         "revision": model_args.model_revision,
-        "use_auth_token": True,
+        "use_auth_token": api_token,
         "padding_side": "left",
         "truncation_side": "left",
     }
@@ -152,7 +163,7 @@ def get_base_model_for_finetuning(model_args, model_config):
             config=model_config,
             cache_dir=model_args.cache_dir,
             revision=model_args.model_revision,
-            use_auth_token=True,
+            use_auth_token=api_token,
         )
     else:
         model = AutoModelForCausalLM.from_config(model_config)
@@ -308,3 +319,24 @@ def _get_block_size(data_args, tokenizer):
 
 def _console_args_points_to_json():
     return len(sys.argv) == 2 and sys.argv[1].endswith(".json")
+
+
+def prepare_lora_model(model, lora_args):
+    logger.info("Preparing LoRa model with PEFT")
+    peft_config = LoraConfig(
+        task_type=TaskType.CAUSAL_LM,
+        inference_mode=False,
+        lora_alpha=lora_args.lora_alpha,
+        lora_dropout=lora_args.lora_dropout,
+        r=lora_args.r,
+        bias=lora_args.bias,
+    )
+    model = get_peft_model(model, peft_config)
+    return model
+
+
+def save_lora_adapter(model, train_args):
+    model.save_pretrained(os.path.join(train_args.output_dir, "final-adapter"))
+    if train_args.push_to_hub:
+        print(type(model))
+        model.push_to_hub(train_args.hub_model_id)
