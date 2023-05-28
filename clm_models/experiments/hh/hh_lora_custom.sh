@@ -1,7 +1,7 @@
 deepspeed ../train.py \
-  --model_name_or_path EleutherAI/gpt-j-6b \
-  --tokenizer_name EleutherAI/gpt-j-6b \
-  --dataset_name AlekseyKorshuk/hh-lmgym-demo \
+  --model_name_or_path PygmalionAI/pygmalion-6b \
+  --tokenizer_name PygmalionAI/pygmalion-6b \
+  --dataset_name AlekseyKorshuk/gpteacher-role-play-chatml \
   --train_to_probs False \
   --do_train \
   --do_eval \
@@ -19,7 +19,7 @@ deepspeed ../train.py \
   --gradient_accumulation_steps 16 \
   --gradient_checkpointing False \
   --max_eval_samples 500 \
-  --num_train_epochs 2 \
+  --num_train_epochs 10 \
   --eval_first_step False \
   --learning_rate 1e-5 \
   --lr_scheduler_type "cosine" \
@@ -31,8 +31,8 @@ deepspeed ../train.py \
   --clean_enabled False \
   --block_size 512 \
   --use_lora True \
-  --warmup_ratio 0.03 \
+  --warmup_ratio 0.1 \
   --weight_decay 0.00001 \
   --push_to_hub True \
-  --hub_model_id "AlekseyKorshuk/hh-lmgym-demo-lora" \
+  --hub_model_id "hedronstone/6b-gpteacher-role-play-chatml" \
   --hub_strategy end \
