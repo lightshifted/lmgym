@@ -35,11 +35,6 @@ from clm_models.custom.model_arguments import (
 logger = logging.getLogger(__name__)
 accuracy_metric = evaluate.load("accuracy")
 
-dotenv_path = "../../.env"
-load_dotenv(dotenv_path)
-
-api_token = os.getenv("HUGGINGFACE_TOKEN")
-
 def get_parsed_arguments():
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments, LoraArguments))
     if _console_args_points_to_json():
@@ -92,7 +87,7 @@ def get_raw_dataset(data_args, model_args):
         data_args.dataset_name,
         data_args.dataset_config_name,
         cache_dir=model_args.cache_dir,
-        use_auth_token=api_token,
+        use_auth_token=True,
     )
     if "validation" not in raw_datasets.keys():
         raw_datasets["validation"] = load_dataset(
@@ -100,14 +95,14 @@ def get_raw_dataset(data_args, model_args):
             data_args.dataset_config_name,
             split=f"train[:{data_args.validation_split_percentage}%]",
             cache_dir=model_args.cache_dir,
-            use_auth_token=api_token,
+            use_auth_token=True,
         )
         raw_datasets["train"] = load_dataset(
             data_args.dataset_name,
             data_args.dataset_config_name,
             split=f"train[{data_args.validation_split_percentage}%:]",
             cache_dir=model_args.cache_dir,
-            use_auth_token=api_token,
+            use_auth_token=True,
         )
     return raw_datasets
 
@@ -116,7 +111,7 @@ def get_model_config(model_args):
     config_kwargs = {
         "cache_dir": model_args.cache_dir,
         "revision": model_args.model_revision,
-        "use_auth_token": api_token,
+        "use_auth_token": True,
     }
     if model_args.config_name:
         config = AutoConfig.from_pretrained(model_args.config_name, **config_kwargs)
@@ -137,7 +132,7 @@ def get_tokenizer(model_args):
         "cache_dir": model_args.cache_dir,
         "use_fast": model_args.use_fast_tokenizer,
         "revision": model_args.model_revision,
-        "use_auth_token": api_token,
+        "use_auth_token": True,
         "padding_side": "left",
         "truncation_side": "left",
     }
@@ -163,7 +158,7 @@ def get_base_model_for_finetuning(model_args, model_config):
             config=model_config,
             cache_dir=model_args.cache_dir,
             revision=model_args.model_revision,
-            use_auth_token=api_token,
+            use_auth_token=True,
         )
     else:
         model = AutoModelForCausalLM.from_config(model_config)
