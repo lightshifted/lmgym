@@ -48,7 +48,7 @@ def main(**kwargs):
     that aligns with the training requirement. If you're unsure about any argument, use --help
     to learn more about it.
     """
-    cmd = ["deepspeed", "../train.py"]
+    cmd = ["deepspeed", "./train.py"]
     
     for k, v in kwargs.items():
         if isinstance(v, bool):
